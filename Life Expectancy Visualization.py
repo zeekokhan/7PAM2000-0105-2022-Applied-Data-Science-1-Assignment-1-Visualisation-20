@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# ### Student ID: 22001928
+# 
+# ### Student Name: Zarak Khan
+
 # # Loading Modules & Data
 
 # In[1]:
@@ -59,4 +63,40 @@ plt.show()
 
 df_temp[temp_up].plot(kind="line", figsize=(15, 6))
 plt.title("Life Expectancy of 10 Countries whose average is Highest")
+plt.show()
+
+
+# In[7]:
+
+
+def get_continent(country_name):
+    try:
+        # Convert country name to ISO 3166-1 alpha-2 code
+        country_code = pc.country_name_to_country_alpha2(country_name)
+        # Use a dictionary to map alpha-2 codes to continents
+        continent_code = pc.country_alpha2_to_continent_code(country_code)
+        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
+        return continent_name
+    except:
+        return "Unknown"
+
+
+df["continent"] = df["Country Name"].apply(get_continent)
+
+
+# In[8]:
+
+
+df_temp = df.iloc[:, 4:-1].T
+df["Avg_Life"] = df.iloc[:, 4:-1].mean(axis=1)
+temp = df[["continent", "Avg_Life"]].groupby("continent").mean()
+
+
+# In[9]:
+
+
+plt.figure(figsize=(15, 5))
+sns.barplot(temp.index, temp.Avg_Life)
+plt.ylim(40, 75)
+plt.title("Life Expectancy at Different Continent")
 plt.show()
